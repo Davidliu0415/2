@@ -50,30 +50,53 @@ void ProjectManagementSystem::ProjectManage() {
                 }
                 break;
 
-            case 2:
-                cout << "Enter project name to modify: ";
-                getline(cin, name);
-                if (Project* p = getProject(name)) {
-                    p->update();
-                } else {
-                    cout << "❌ Project not found!" << endl;
-                }
-                break;
+            case 2: {
+                    cout << "Enter project name to modify: ";
+                    cin.ignore();  // 清除缓冲区
+                    string name;
+                    getline(cin, name);
 
-            case 3:
-                cout << "Enter project name to delete: ";
-                getline(cin, name);
-                {
-                    auto it = remove_if(projects.begin(), projects.end(),
-                        [&name](const Project& p) { return p.getName() == name; });
-                    if (it != projects.end()) {
-                        projects.erase(it, projects.end());
-                        cout << "✅ Project deleted successfully." << endl;
-                    } else {
-                        cout << "❌ Project not found!" << endl;
+                    bool found = false;
+
+                    for (auto& project : projects) {
+                        if (project.getName() == name) {
+                            project.update();  // 找到后调用 update()
+                            found = true;
+                            break;
+                        }
                     }
+
+                    if (!found) {
+                        cout << "❌ Project \"" << name << "\" not found!" << endl;
+                    }
+
+                    break;
                 }
-                break;
+
+
+                    case 3: {
+                        string name;
+                        cout << "Enter project name to delete: ";
+                        cin.ignore();  // 忽略前面遗留的换行符
+                        getline(cin, name);
+
+                        bool deleted = false;
+                        for (auto it = projects.begin(); it != projects.end(); ++it) {
+                            if (it->getName() == name) {
+                                projects.erase(it);
+                                cout << " Project \"" << name << "\" deleted successfully.\n";
+                                deleted = true;
+                                break;
+                            }
+                        }
+
+                        if (!deleted) {
+                            cout << " Project \"" << name << "\" not found.\n";
+                        }
+
+                        break;
+                    }
+
 
             case 4:
                 for (const auto& p : projects) {

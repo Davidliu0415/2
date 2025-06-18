@@ -51,7 +51,7 @@ void Project::add() {
     cout << "Enter project status (e.g., Not Started/In Progress/Completed):" << endl;
     getline(cin, status);
 
-    cout << "Project added successfully!" << endl;
+    ;
 }
 
 //delete function, delete this project
