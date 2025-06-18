@@ -1,7 +1,6 @@
 #ifndef TEAM_MEMBER_H
 #define TEAM_MEMBER_H
 
-#include "Project.h"
 #include <string>
 #include <vector>
 
@@ -12,8 +11,8 @@ private:
     string name;
     string role;
     string contactInfo;
-    Project* assignedProject = nullptr;  // 使用原始指针
-    static vector<TeamMember> teamMembers;
+    // Project* assignedProject = nullptr;  // 使用原始指针
+    // static vector<TeamMember> teamMembers;
 
 public:
     TeamMember(const string& name = "",
@@ -30,21 +29,19 @@ public:
     void setRole(const string& newRole) { role = newRole; }
     void setContactInfo(const string& newContactInfo) { contactInfo = newContactInfo; }
 
-    // Project association
-    void setAssignedProject(Project* project);
-    Project* getAssignedProject() const;
+
 
     // CRUD operations
-    bool add();
-    bool update();
-    bool remove();
+    void add();
+    void update();
+    void remove();
     void display() const;
 
     // Static methods
-    static TeamMember* getTeamMember(const string& memberName);
-    static vector<TeamMember>& getAllTeamMembers();
-    static bool saveToFile(const string& filename);
-    static bool loadFromFile(const string& filename);
+    // static TeamMember* getTeamMember(const string& memberName);
+    // static vector<TeamMember>& getAllTeamMembers();
+    // static bool saveToFile(const string& filename);
+    // static bool loadFromFile(const string& filename);
 };
 
 #endif // TEAM_MEMBER_H

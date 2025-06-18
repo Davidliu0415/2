@@ -1,4 +1,4 @@
-#include "Task.h"
+#include "task.h"
 #include <iostream>
 #include <algorithm>
 
@@ -14,78 +14,84 @@ Task::Task(const string& name,
 // 添加任务（此处为示例，可与项目逻辑结合）
 void Task::add() {
     
-    cin.ignore();  // 清空前一次 cin 后残留的换行符
+    cin.ignore();  // Clear the newline character from previous cin
 
-    cout << "请输入项目名称：" << endl;
+    cout << "Enter task name:" << endl;
     getline(cin, name);
 
-    cout << "请输入项目描述：" << endl;
+    cout << "Enter task description:" << endl;
     getline(cin, description);
 
-    cout << "请输入项目开始日期 (YYYY-MM-DD)：" << endl;
+    cout << "Enter task start date (YYYY-MM-DD):" << endl;
     getline(cin, startDate);
 
-    cout << "请输入项目结束日期 (YYYY-MM-DD)：" << endl;
+    cout << "Enter task end date (YYYY-MM-DD):" << endl;
     getline(cin, endDate);
 
-    cout << "请输入项目状态（如 Not Started/In Progress/Completed）：" << endl;
+    cout << "Enter task status (e.g., Not Started/In Progress/Completed):" << endl;
     getline(cin, status);
 
-    cout << "项目添加成功！" << endl;
+    cout << "Task added successfully!" << endl;
 }
 
 
 
 // 更新任务信息
 void Task::update() {
-    cin.ignore(); // 清理前一输入残留的换行符
+    cin.ignore();  // Clear the newline character from previous cin
 
     string input;
-    cout << " 正在更新任务：" << name << endl;
 
-    cout << "请输入新任务描述（或输入 q 保持原值）：" << endl;
+    cout << "Enter new task name (or enter q to keep current value):" << endl;
+    getline(cin, input);
+    if (input != "q" && !input.empty()) {
+        name = input;
+    }
+
+    cout << "Enter new task description (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         description = input;
     }
 
-    cout << "请输入新开始日期 (YYYY-MM-DD)（或输入 q 保持原值）：" << endl;
+    cout << "Enter new task start date (YYYY-MM-DD) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         startDate = input;
     }
 
-    cout << "请输入新结束日期 (YYYY-MM-DD)（或输入 q 保持原值）：" << endl;
+    cout << "Enter new task end date (YYYY-MM-DD) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         endDate = input;
     }
 
-    cout << "请输入新任务状态（如 Not Started/In Progress/Completed）（或输入 q 保持原值）：" << endl;
+    cout << "Enter new task status (e.g., Not Started/In Progress/Completed) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         status = input;
     }
 
-    cout << " 任务更新成功。" << endl;
+    cout << "Task information updated successfully." << endl;
 }
 
 
 // 移除任务（本地逻辑）
 void Task::remove() {
-    cout << "任务 [" << name << "] 被标记为删除（逻辑操作，仅限本地）" << endl;
+    cout << "Task [" << name << "] marked for deletion (logical operation, local only)" << endl;
 }
 
 // 显示任务详情
 void Task::display() const {
-    cout << "\n任务名称: " << name << endl;
-    cout << "描述: " << description << endl;
-    cout << "开始日期: " << startDate << endl;
-    cout << "结束日期: " << endDate << endl;
-    cout << "状态: " << status << endl;
+    cout << "\nTask Information:" << endl;
+    cout << "Name: " << getName() << endl;
+    cout << "Description: " << getDescription() << endl;
+    cout << "Start Date: " << getStartDate() << endl;
+    cout << "End Date: " << getEndDate() << endl;
+    cout << "Status: " << getStatus() << endl;
 
     if (!subtasks.empty()) {
-        cout << "子任务列表:" << endl;
+        cout << "Subtask List:" << endl;
         for (const auto& sub : subtasks) {
             sub.display();
         }
@@ -94,41 +100,92 @@ void Task::display() const {
 
 // ========== 子任务管理 ==========
 
-bool Task::addSubtask(const Task& subtask) {
+void Task::addSubtask() {
+    cin.ignore();
+    string name, description, startDate, endDate, status;
+
+    cout << "Enter subtask name:" << endl;
+    getline(cin, name);
+
+    // 判断重名
     auto it = find_if(subtasks.begin(), subtasks.end(),
-                      [&subtask](const Task& t) { return t.getName() == subtask.getName(); });
+                      [&name](const Task& t) { return t.getName() == name; });
 
     if (it != subtasks.end()) {
-        return false;  // 已存在相同名称的子任务
+        cout << "⚠️ Subtask \"" << name << "\" already exists, addition failed.\n";
+        return;
     }
 
-    subtasks.push_back(subtask);
-    return true;
+    cout << "Enter subtask description:" << endl;
+    getline(cin, description);
+
+    cout << "Enter subtask start date:" << endl;
+    getline(cin, startDate);
+
+    cout << "Enter subtask end date:" << endl;
+    getline(cin, endDate);
+
+    cout << "Enter subtask status:" << endl;
+    getline(cin, status);
+
+    Task sub(name, description, startDate, endDate, status);
+    subtasks.push_back(sub);
+    cout << "✅ Subtask \"" << name << "\" added successfully.\n";
 }
 
-bool Task::removeSubtask(const string& subtaskName) {
+void Task::removeSubtask() {
+    cin.ignore();
+    string name;
+    cout << "Enter the name of the subtask to delete:" << endl;
+    getline(cin, name);
+
     auto it = find_if(subtasks.begin(), subtasks.end(),
-                      [&subtaskName](const Task& t) { return t.getName() == subtaskName; });
+                      [&name](const Task& t) { return t.getName() == name; });
 
     if (it == subtasks.end()) {
-        return false;
+        cout << "❌ Subtask named \"" << name << "\" not found.\n";
+        return;
     }
 
     subtasks.erase(it);
-    return true;
+    cout << "✅ Subtask \"" << name << "\" deleted.\n";
 }
 
-bool Task::updateSubtask(const string& subtaskName, const Task& newSubtask) {
+void Task::updateSubtask() {
+    cin.ignore();
+    string name;
+    cout << "Enter the name of the subtask to update:" << endl;
+    getline(cin, name);
+
     auto it = find_if(subtasks.begin(), subtasks.end(),
-                      [&subtaskName](const Task& t) { return t.getName() == subtaskName; });
+                      [&name](Task& t) { return t.getName() == name; });
 
     if (it == subtasks.end()) {
-        return false;
+        cout << "❌ Subtask named \"" << name << "\" not found.\n";
+        return;
     }
 
-    *it = newSubtask;
-    return true;
+    string input;
+
+    cout << "Current description: " << it->getDescription() << "\nEnter new description (or enter q to keep current value):" << endl;
+    getline(cin, input);
+    if (input != "q" && !input.empty()) it->setDescription(input);
+
+    cout << "Current start date: " << it->getStartDate() << "\nEnter new start date (or enter q to keep current value):" << endl;
+    getline(cin, input);
+    if (input != "q" && !input.empty()) it->setStartDate(input);
+
+    cout << "Current end date: " << it->getEndDate() << "\nEnter new end date (or enter q to keep current value):" << endl;
+    getline(cin, input);
+    if (input != "q" && !input.empty()) it->setEndDate(input);
+
+    cout << "Current status: " << it->getStatus() << "\nEnter new status (or enter q to keep current value):" << endl;
+    getline(cin, input);
+    if (input != "q" && !input.empty()) it->setStatus(input);
+
+    cout << "✅ Subtask \"" << name << "\" updated.\n";
 }
+
 
 Task* Task::getSubtask(const string& subtaskName) {
     auto it = find_if(subtasks.begin(), subtasks.end(),

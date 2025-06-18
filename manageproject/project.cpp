@@ -5,7 +5,7 @@
 #include <string>
 
 
-// 构造函数实现
+// Constructor implementation
 Project::Project(const string& name, const string& description, 
                 const string& startDate, const string& endDate, 
                 const string& status)
@@ -14,47 +14,47 @@ Project::Project(const string& name, const string& description,
 
 
 void Project::display() const {
-    cout << "\n项目信息：" << endl;
-    cout << "名称: " << getName() << endl;
-    cout << "描述: " << getDescription() << endl;
-    cout << "开始日期: " << getStartDate() << endl;
-    cout << "结束日期: " << getEndDate() << endl;
-    cout << "状态: " << getStatus() << endl;
+    cout << "\nProject Information:" << endl;
+    cout << "Name: " << getName() << endl;
+    cout << "Description: " << getDescription() << endl;
+    cout << "Start Date: " << getStartDate() << endl;
+    cout << "End Date: " << getEndDate() << endl;
+    cout << "Status: " << getStatus() << endl;
     
-    cout << "\n任务列表：" << endl;
+    cout << "\nTask List:" << endl;
     for (const auto& task : tasks) {
         task.display();
     }
     
-    cout << "\n团队成员：" << endl;
+    cout << "\nTeam Members:" << endl;
     for (const auto& member : teamMembers) {
         member.display();
     }
 }
 
-//add函数
+//add function
 void Project::add() {
-    cin.ignore();  // 清空前一次 cin 后残留的换行符
+    cin.ignore();  // Clear the newline character from previous cin
 
-    cout << "请输入项目名称：" << endl;
+    cout << "Enter project name:" << endl;
     getline(cin, name);
 
-    cout << "请输入项目描述：" << endl;
+    cout << "Enter project description:" << endl;
     getline(cin, description);
 
-    cout << "请输入项目开始日期 (YYYY-MM-DD)：" << endl;
+    cout << "Enter project start date (YYYY-MM-DD):" << endl;
     getline(cin, startDate);
 
-    cout << "请输入项目结束日期 (YYYY-MM-DD)：" << endl;
+    cout << "Enter project end date (YYYY-MM-DD):" << endl;
     getline(cin, endDate);
 
-    cout << "请输入项目状态（如 Not Started/In Progress/Completed）：" << endl;
+    cout << "Enter project status (e.g., Not Started/In Progress/Completed):" << endl;
     getline(cin, status);
 
-    cout << "项目添加成功！" << endl;
+    cout << "Project added successfully!" << endl;
 }
 
-//delete函数,删除这个project
+//delete function, delete this project
 // void Project::remove() {
 //     cout << "请输入项目名称：" << endl;
 //     cin >> name;
@@ -63,122 +63,112 @@ void Project::add() {
 //     }
 
 void Project::update() {
-    cin.ignore();  // 清除之前 cin 留下的回车符
+    cin.ignore();  // Clear the newline character from previous cin
 
     string input;
 
-    cout << "请输入新项目名称（或输入 q 保持原值）：" << endl;
+    cout << "Enter new project name (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         name = input;
     }
 
-    cout << "请输入新项目描述（或输入 q 保持原值）：" << endl;
+    cout << "Enter new project description (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         description = input;
     }
 
-    cout << "请输入新项目开始日期 (YYYY-MM-DD)（或输入 q 保持原值）：" << endl;
+    cout << "Enter new project start date (YYYY-MM-DD) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         startDate = input;
     }
 
-    cout << "请输入新项目结束日期 (YYYY-MM-DD)（或输入 q 保持原值）：" << endl;
+    cout << "Enter new project end date (YYYY-MM-DD) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         endDate = input;
     }
 
-    cout << "请输入新项目状态（如 Not Started/In Progress/Completed）（或输入 q 保持原值）：" << endl;
+    cout << "Enter new project status (e.g., Not Started/In Progress/Completed) (or enter q to keep current value):" << endl;
     getline(cin, input);
     if (input != "q" && !input.empty()) {
         status = input;
     }
 
-    cout << " 项目信息已更新完成。" << endl;
+    cout << "Project information updated successfully." << endl;
 }
 
 
 
 
-// // 任务管理实现
-// bool Project::addTask(const Task& task) {
-//     if (getTask(task.getName()) != nullptr) {
-//         return false;
-//     }
-//     tasks.push_back(task);
-//     return true;
-// }
+// Task management implementation
+bool Project::addTask(const Task& task) {
+    if (getTask(task.getName()) != nullptr) {
+        return false;
+    }
+    tasks.push_back(task);
+    return true;
+}
 
-// bool Project::removeTask(const string& taskName) {
-//     auto it = find_if(tasks.begin(), tasks.end(),
-//         [&taskName](const Task& t) { return t.getName() == taskName; });
+bool Project::removeTask(const string& taskName) {
+    auto it = find_if(tasks.begin(), tasks.end(),
+        [&taskName](const Task& t) { return t.getName() == taskName; });
     
-//     if (it != tasks.end()) {
-//         tasks.erase(it);
-//         return true;
-//     }
-//     return false;
-// }
+    if (it != tasks.end()) {
+        tasks.erase(it);
+        return true;
+    }
+    return false;
+}
 
-// bool Project::updateTask(const string& taskName, const Task& newTask) {
-//     auto it = find_if(tasks.begin(), tasks.end(),
-//         [&taskName](const Task& t) { return t.getName() == taskName; });
+bool Project::updateTask(const string& taskName, const Task& newTask) {
+    auto it = find_if(tasks.begin(), tasks.end(),
+        [&taskName](const Task& t) { return t.getName() == taskName; });
     
-//     if (it != tasks.end()) {
-//         *it = newTask;
-//         return true;
-//     }
-//     return false;
-// }
+    if (it != tasks.end()) {
+        *it = newTask;
+        return true;
+    }
+    return false;
+}
 
-// Task* Project::getTask(const string& taskName) {
-//     auto it = find_if(tasks.begin(), tasks.end(),
-//         [&taskName](const Task& t) { return t.getName() == taskName; });
+Task* Project::getTask(const string& taskName) {
+    auto it = find_if(tasks.begin(), tasks.end(),
+        [&taskName](const Task& t) { return t.getName() == taskName; });
     
-//     return it != tasks.end() ? &(*it) : nullptr;
-// }
+    return it != tasks.end() ? &(*it) : nullptr;
+}
 
-// // 团队成员管理实现
-// bool Project::addTeamMember(const TeamMember& member) {
-//     if (getTeamMember(member.getName()) != nullptr) {
-//         return false;
-//     }
-//     teamMembers.push_back(member);
-//     return true;
-// }
+// Team member management implementation
+bool Project::addTeamMember(const TeamMember& member) {
+    if (getTeamMember(member.getName()) != nullptr) {
+        return false;
+    }
+    teamMembers.push_back(member);
+    return true;
+}
 
-// bool Project::removeTeamMember(const string& memberName) {
-//     auto it = find_if(teamMembers.begin(), teamMembers.end(),
-//         [&memberName](const TeamMember& m) { return m.getName() == memberName; });
+TeamMember* Project::getTeamMember(const string& memberName) {
+    auto it = find_if(teamMembers.begin(), teamMembers.end(),
+        [&memberName](const TeamMember& m) { return m.getName() == memberName; });
     
-//     if (it != teamMembers.end()) {
-//         teamMembers.erase(it);
-//         return true;
-//     }
-//     return false;
-// }
+    return it != teamMembers.end() ? &(*it) : nullptr;
+}
 
-// bool Project::updateTeamMember(const string& memberName, const TeamMember& newMember) {
-//     auto it = find_if(teamMembers.begin(), teamMembers.end(),
-//         [&memberName](const TeamMember& m) { return m.getName() == memberName; });
+bool Project::removeTeamMember(const string& memberName) {
+    auto it = find_if(teamMembers.begin(), teamMembers.end(),
+        [&memberName](const TeamMember& m) { return m.getName() == memberName; });
     
-//     if (it != teamMembers.end()) {
-//         *it = newMember;
-//         return true;
-//     }
-//     return false;
-// }
+    if (it != teamMembers.end()) {
+        teamMembers.erase(it);
+        return true;
+    }
+    return false;
+}
 
-// TeamMember* Project::getTeamMember(const string& memberName) {
-//     auto it = find_if(teamMembers.begin(), teamMembers.end(),
-//         [&memberName](const TeamMember& m) { return m.getName() == memberName; });
-    
-//     return it != teamMembers.end() ? &(*it) : nullptr;
-// }
-// // 静态方法实现
+// Static method implementation
 // Project* Project::getProject(const string& projectName) {
 //     auto it = find_if(projects.begin(), projects.end(),
 //         [&projectName](const Project& p) { return p.getName() == projectName; });
@@ -234,3 +224,9 @@ void Project::update() {
 //     return true;
 //}
 
+vector<Task>& Project::getTasks() {
+    return tasks;
+}
+vector<TeamMember>& Project::getTeamMembers() {
+    return teamMembers;
+}

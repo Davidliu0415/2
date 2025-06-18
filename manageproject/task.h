@@ -29,9 +29,9 @@ public:
     void display() const override;
 
     // Subtask management
-    bool addSubtask(const Task& subtask);
-    bool removeSubtask(const string& subtaskName);
-    bool updateSubtask(const string& subtaskName, const Task& newSubtask);
+    void addSubtask();
+    void removeSubtask();
+    void updateSubtask();
     Task* getSubtask(const string& subtaskName);
 
     // // Project association

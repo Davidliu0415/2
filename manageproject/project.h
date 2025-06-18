@@ -32,16 +32,21 @@ public:
     void display() const override;
 
     // // Task management
-    // bool addTask(const Task& task);
-    // bool removeTask(const string& taskName);
-    // bool updateTask(const string& taskName, const Task& newTask);
-    // Task* getTask(const string& taskName);
+    bool addTask(const Task& task);
+    bool removeTask(const string& taskName);
+    bool updateTask(const string& taskName, const Task& newTask);
+    Task* getTask(const string& taskName);
 
-    // // Team member management
-    // bool addTeamMember(const TeamMember& member);
-    // bool removeTeamMember(const string& memberName);
-    // bool updateTeamMember(const string& memberName, const TeamMember& newMember);
-    // TeamMember* getTeamMember(const string& memberName);
+    // Team member management
+    bool addTeamMember(const TeamMember& member);
+    bool removeTeamMember(const string& memberName);
+    bool updateTeamMember(const string& memberName, const TeamMember& newMember);
+    TeamMember* getTeamMember(const string& memberName);
+
+    // 在 public 中添加：
+    vector<Task>& getTasks(); // 返回任务列表引用
+    vector<TeamMember>& getTeamMembers(); // 返回成员列表引用
+
 
     // // Static methods
     // static Project* getProject(const string& projectName);
