@@ -26,7 +26,7 @@ void ProjectManagementSystem::ProjectManage() {
         cout << "1. Add Project" << endl;
         cout << "2. Modify Project" << endl;
         cout << "3. Delete Project" << endl;
-        cout << "4. Display All Projects" << endl;
+        cout << "4. Display All Projects" << endl;//修饰
         cout << "0. Return to Main Menu" << endl;
         cout << "Please select an option: ";
         
@@ -67,7 +67,7 @@ void ProjectManagementSystem::ProjectManage() {
                     }
 
                     if (!found) {
-                        cout << "❌ Project \"" << name << "\" not found!" << endl;
+                        cout << " Project \"" << name << "\" not found!" << endl;
                     }
 
                     break;
@@ -106,7 +106,7 @@ void ProjectManagementSystem::ProjectManage() {
                 break;
 
             default:
-                cout << "❌ Invalid option!" << endl;
+                cout << " Invalid option!" << endl;
         }
     }
 }
@@ -120,7 +120,7 @@ void ProjectManagementSystem::TaskManage() {
 
     Project* project = getProject(pname);
     if (!project) {
-        cout << "❌ Project does not exist, cannot manage tasks." << endl;
+        cout << " Project does not exist, cannot manage tasks." << endl;
         return;
     }
 
@@ -130,6 +130,7 @@ void ProjectManagementSystem::TaskManage() {
         cout << "2. Modify Task" << endl;
         cout << "3. Delete Task" << endl;
         cout << "4. Display Task List" << endl;
+        cout << "5. Manage Subtasks" << endl;
         cout << "0. Return to Previous Menu" << endl;
         cout << "Please select an option: ";
 
@@ -148,7 +149,7 @@ void ProjectManagementSystem::TaskManage() {
                 if (!project->getTask(temp.getName())) {
                     project->addTask(temp);
                 } else {
-                    cout << "❌ Task with same name already exists." << endl;
+                    cout << " Task with same name already exists." << endl;
                 }
                 break;
 
@@ -158,7 +159,7 @@ void ProjectManagementSystem::TaskManage() {
                 if (Task* t = project->getTask(tname)) {
                     t->update();
                 } else {
-                    cout << "❌ Task not found." << endl;
+                    cout << " Task not found." << endl;
                 }
                 break;
 
@@ -166,7 +167,7 @@ void ProjectManagementSystem::TaskManage() {
                 cout << "Enter task name to delete: ";
                 getline(cin, tname);
                 if (!project->removeTask(tname)) {
-                    cout << "❌ Delete failed, task does not exist." << endl;
+                    cout << " Delete failed, task does not exist." << endl;
                 }
                 break;
 
@@ -176,9 +177,42 @@ void ProjectManagementSystem::TaskManage() {
                     cout << "----------------" << endl;
                 }
                 break;
+            
+            case 5: {
+                cout << "Please enter the task name to manage its subtasks: ";
+                getline(cin, tname);
+                Task* t = project->getTask(tname);
+                if (!t) {
+                    cout << "Task not found!" << endl;
+                    break;
+                }
+                bool subtask_menu = true;
+                while (subtask_menu) {
+                    cout << "\n=== Subtask Management (Task: " << t->getName() << ") ===" << endl;
+                    cout << "1. Add Subtask" << endl;
+                    cout << "2. Edit Subtask" << endl;
+                    cout << "3. Delete Subtask" << endl;
+                    cout << "4. Show All Subtasks" << endl;
+                    cout << "0. Return to Previous Menu" << endl;
+                    cout << "Please select: ";
+                    int subchoice;
+                    cin >> subchoice;
+                    cin.ignore();
+                    switch (subchoice) {
+                        case 0: subtask_menu = false; break;
+                        case 1: t->addSubtask(); break;
+                        case 2: t->updateSubtask(); break;
+                        case 3: t->removeSubtask(); break;
+                        case 4: t->display(); break;
+                        default: cout << "Invalid option" << endl;
+                    }
+                }
+                break;
+            }
+            
 
             default:
-                cout << "❌ Invalid option" << endl;
+                cout << " Invalid option" << endl;
         }
     }
 }
@@ -192,7 +226,7 @@ void ProjectManagementSystem::TeamMemberManage() {
 
     Project* project = getProject(pname);
     if (!project) {
-        cout << "❌ Project does not exist, cannot manage team members." << endl;
+        cout << " Project does not exist, cannot manage team members." << endl;
         return;
     }
 
@@ -220,7 +254,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 if (!project->getTeamMember(temp.getName())) {
                     project->addTeamMember(temp);
                 } else {
-                    cout << "❌ Member with same name already exists." << endl;
+                    cout << " Member with same name already exists." << endl;
                 }
                 break;
 
@@ -230,7 +264,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 if (TeamMember* m = project->getTeamMember(mname)) {
                     m->update();
                 } else {
-                    cout << "❌ Member not found." << endl;
+                    cout << " Member not found." << endl;
                 }
                 break;
 
@@ -238,7 +272,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 cout << "Enter member name to delete: ";
                 getline(cin, mname);
                 if (!project->removeTeamMember(mname)) {
-                    cout << "❌ Delete failed, member does not exist." << endl;
+                    cout << " Delete failed, member does not exist." << endl;
                 }
                 break;
 
@@ -250,7 +284,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 break;
 
             default:
-                cout << "❌ Invalid option" << endl;
+                cout << " Invalid option" << endl;
         }
     }
 }

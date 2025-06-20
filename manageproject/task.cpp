@@ -14,7 +14,7 @@ Task::Task(const string& name,
 // 添加任务（此处为示例，可与项目逻辑结合）
 void Task::add() {
     
-    cin.ignore();  // Clear the newline character from previous cin
+    // cin.ignore();  // Clear the newline character from previous cin
 
     cout << "Enter task name:" << endl;
     getline(cin, name);
@@ -38,7 +38,7 @@ void Task::add() {
 
 // 更新任务信息
 void Task::update() {
-    cin.ignore();  // Clear the newline character from previous cin
+    // cin.ignore();  // Clear the newline character from previous cin
 
     string input;
 
@@ -101,7 +101,7 @@ void Task::display() const {
 // ========== 子任务管理 ==========
 
 void Task::addSubtask() {
-    cin.ignore();
+    // cin.ignore();
     string name, description, startDate, endDate, status;
 
     cout << "Enter subtask name:" << endl;
@@ -112,7 +112,7 @@ void Task::addSubtask() {
                       [&name](const Task& t) { return t.getName() == name; });
 
     if (it != subtasks.end()) {
-        cout << "⚠️ Subtask \"" << name << "\" already exists, addition failed.\n";
+        cout << " Subtask \"" << name << "\" already exists, addition failed.\n";
         return;
     }
 
@@ -130,7 +130,7 @@ void Task::addSubtask() {
 
     Task sub(name, description, startDate, endDate, status);
     subtasks.push_back(sub);
-    cout << "✅ Subtask \"" << name << "\" added successfully.\n";
+    cout << " Subtask \"" << name << "\" added successfully.\n";
 }
 
 void Task::removeSubtask() {
@@ -143,16 +143,16 @@ void Task::removeSubtask() {
                       [&name](const Task& t) { return t.getName() == name; });
 
     if (it == subtasks.end()) {
-        cout << "❌ Subtask named \"" << name << "\" not found.\n";
+        cout << " Subtask named \"" << name << "\" not found.\n";
         return;
     }
 
     subtasks.erase(it);
-    cout << "✅ Subtask \"" << name << "\" deleted.\n";
+    cout << " Subtask \"" << name << "\" deleted.\n";
 }
 
 void Task::updateSubtask() {
-    cin.ignore();
+    // cin.ignore();
     string name;
     cout << "Enter the name of the subtask to update:" << endl;
     getline(cin, name);
@@ -161,7 +161,7 @@ void Task::updateSubtask() {
                       [&name](Task& t) { return t.getName() == name; });
 
     if (it == subtasks.end()) {
-        cout << "❌ Subtask named \"" << name << "\" not found.\n";
+        cout << " Subtask named \"" << name << "\" not found.\n";
         return;
     }
 
@@ -183,7 +183,7 @@ void Task::updateSubtask() {
     getline(cin, input);
     if (input != "q" && !input.empty()) it->setStatus(input);
 
-    cout << "✅ Subtask \"" << name << "\" updated.\n";
+    cout << " Subtask \"" << name << "\" updated.\n";
 }
 
 

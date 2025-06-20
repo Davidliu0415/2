@@ -11,7 +11,7 @@ TeamMember::TeamMember(const string& name,
 
 // ✅ 添加成员（用户输入）
 void TeamMember::add() {
-    cin.ignore();  // Clear the newline character from previous cin
+    // cin.ignore();  // Clear the newline character from previous cin
 
     cout << "Enter team member name:" << endl;
     getline(cin, name);
@@ -27,7 +27,7 @@ void TeamMember::add() {
 
 // ✅ 更新成员信息
 void TeamMember::update() {
-    cin.ignore();  // Clear the newline character from previous cin
+    // cin.ignore();  // Clear the newline character from previous cin
 
     string input;
 

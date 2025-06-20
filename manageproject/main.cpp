@@ -5,10 +5,7 @@
 
 int main() {
     ProjectManagementSystem pms;
-    
-    // Initialize some example projects
-    Project project1("Project1", "This is the first project", "2024-03-20", "2024-04-20", "In Progress");
-    Project project2("Project2", "This is the second project", "2024-03-21", "2024-04-21", "Not Started");
+
 
     while (true) {
         cout << "\n=== Main Menu ===" << endl;
