@@ -48,6 +48,10 @@ public:
     // 在 public 中添加：
     vector<Task>& getTasks(); // 返回任务列表引用
     vector<TeamMember>& getTeamMembers(); // 返回成员列表引用
+    
+    // Const versions for const objects
+    const vector<Task>& getTasks() const; // 返回任务列表常量引用
+    const vector<TeamMember>& getTeamMembers() const; // 返回成员列表常量引用
 
     // Vendor management
     void addVendor(Vendor* v);

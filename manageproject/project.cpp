@@ -269,6 +269,14 @@ vector<TeamMember>& Project::getTeamMembers() {
     return teamMembers;
 }
 
+// Const versions
+const vector<Task>& Project::getTasks() const {
+    return tasks;
+}
+const vector<TeamMember>& Project::getTeamMembers() const {
+    return teamMembers;
+}
+
 void Project::addVendor(Vendor* v) {
     if (std::find(vendors.begin(), vendors.end(), v) == vendors.end())
         vendors.push_back(v);

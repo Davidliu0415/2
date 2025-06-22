@@ -1,0 +1,17 @@
+[2025-06-22 13:22:09] === Project Management System Started ===
+[2025-06-22 13:22:18] ADMIN LOGIN: Admin logged in successfully
+[2025-06-22 13:23:05] LOGOUT: Admin logged out
+[2025-06-22 13:23:09] USER LOGIN: Failed login attempt for user 1
+[2025-06-22 13:23:09] === Project Management System Closed ===
+[2025-06-22 13:26:26] === Project Management System Started ===
+[2025-06-22 13:26:29] USER LOGIN: Failed login attempt for user 1
+[2025-06-22 13:26:29] === Project Management System Closed ===
+[2025-06-22 13:29:02] === Project Management System Started ===
+[2025-06-22 13:29:05] USER LOGIN: Failed login attempt for user 1
+[2025-06-22 13:29:08] ADMIN LOGIN: Failed login attempt
+[2025-06-22 13:29:12] ADMIN LOGIN: Admin logged in successfully
+[2025-06-22 13:29:41] LOGOUT: Admin logged out
+[2025-06-22 13:29:43] USER LOGIN: 1 logged in successfully
+[2025-06-22 13:29:46] USER ACTION: 1 viewed all projects
+[2025-06-22 13:29:57] LOGOUT: 1 logged out
+[2025-06-22 13:29:59] === Project Management System Closed ===
