@@ -2,7 +2,7 @@
 
 echo Compiling all source files...
 
-g++ -std=c++11 -o project.exe main.cpp project.cpp ProjectManagementSystem.cpp pt.cpp task.cpp TeamMenber.cpp
+g++ -std=c++11 -o project.exe main.cpp project.cpp ProjectManagementSystem.cpp pt.cpp task.cpp TeamMenber.cpp CompanyManagementSystem.cpp Vendor.cpp Client.cpp
 
 if %errorlevel%==0 (
     echo Compilation successful. project.exe generated.

@@ -1,4 +1,6 @@
 #include "project.h"
+#include "Vendor.h"
+#include "Client.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -30,6 +32,42 @@ void Project::display() const {
     for (const auto& member : teamMembers) {
         member.display();
     }
+
+    cout << "\nVendors: ";
+    try {
+        if (vendors.empty()) {
+            cout << "None";
+        } else {
+            for (const auto* v : vendors) {
+                if (v && !v->getCompanyName().empty()) {
+                    cout << v->getCompanyName() << " ";
+                }
+            }
+        }
+    } catch (const std::exception& e) {
+        cout << "Error displaying vendors: " << e.what();
+    } catch (...) {
+        cout << "Unknown error displaying vendors";
+    }
+    cout << endl;
+    
+    cout << "Clients: ";
+    try {
+        if (clients.empty()) {
+            cout << "None";
+        } else {
+            for (const auto* c : clients) {
+                if (c && !c->getCompanyName().empty()) {
+                    cout << c->getCompanyName() << " ";
+                }
+            }
+        }
+    } catch (const std::exception& e) {
+        cout << "Error displaying clients: " << e.what();
+    } catch (...) {
+        cout << "Unknown error displaying clients";
+    }
+    cout << endl;
 }
 
 //add function
@@ -230,3 +268,21 @@ vector<Task>& Project::getTasks() {
 vector<TeamMember>& Project::getTeamMembers() {
     return teamMembers;
 }
+
+void Project::addVendor(Vendor* v) {
+    if (std::find(vendors.begin(), vendors.end(), v) == vendors.end())
+        vendors.push_back(v);
+}
+void Project::removeVendor(Vendor* v) {
+    vendors.erase(std::remove(vendors.begin(), vendors.end(), v), vendors.end());
+}
+std::vector<Vendor*>& Project::getVendors() { return vendors; }
+
+void Project::addClient(Client* c) {
+    if (std::find(clients.begin(), clients.end(), c) == clients.end())
+        clients.push_back(c);
+}
+void Project::removeClient(Client* c) {
+    clients.erase(std::remove(clients.begin(), clients.end(), c), clients.end());
+}
+std::vector<Client*>& Project::getClients() { return clients; }

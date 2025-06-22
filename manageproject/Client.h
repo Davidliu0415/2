@@ -2,12 +2,13 @@
 #define CLIENT_H
 
 #include "Company.h"
-#include "Project.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
 using namespace std;
+
+class Project; // 前向声明
 
 class Client : public Company {
 private:

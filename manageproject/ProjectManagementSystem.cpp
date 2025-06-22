@@ -289,5 +289,9 @@ void ProjectManagementSystem::TeamMemberManage() {
     }
 }
 
+vector<Project>& ProjectManagementSystem::getProjects() {
+    return projects;
+}
+
 
 

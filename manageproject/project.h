@@ -8,15 +8,17 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <string>
-
-
 using namespace std;
+
+class Vendor; // 前向声明
+class Client; // 前向声明
 
 class Project : public PT {
 private:
     vector<Task> tasks;
     vector<TeamMember> teamMembers;
+    vector<Vendor*> vendors;
+    vector<Client*> clients;
 
 public:
     Project(const string& name = "",
@@ -47,6 +49,15 @@ public:
     vector<Task>& getTasks(); // 返回任务列表引用
     vector<TeamMember>& getTeamMembers(); // 返回成员列表引用
 
+    // Vendor management
+    void addVendor(Vendor* v);
+    void removeVendor(Vendor* v);
+    vector<Vendor*>& getVendors();
+
+    // Client management
+    void addClient(Client* c);
+    void removeClient(Client* c);
+    vector<Client*>& getClients();
 
     // // Static methods
     // static Project* getProject(const string& projectName);

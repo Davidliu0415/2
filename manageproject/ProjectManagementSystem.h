@@ -20,7 +20,7 @@ public:
     // 在 public 中添加：
     vector<Task>& getTasks(); // 返回任务列表引用
    vector<TeamMember>& getTeamMembers(); // 返回成员列表引用
-
+   vector<Project>& getProjects(); // 返回项目列表引用
 
     // 管理接口
     void ProjectManage();

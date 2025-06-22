@@ -8,9 +8,12 @@
 
 using namespace std;
 
+class Project; // 前向声明
+
 class Vendor : public Company {
 private:
     vector<Task*> assignedTasks;                // 原始指针替代 weak_ptr
+    vector<Project*> assignedProjects;
     static vector<Vendor> vendors;              // 不再使用 shared_ptr
 
 public:
@@ -28,6 +31,11 @@ public:
     bool assignTask(Task* task);                     // 使用原始指针
     bool removeTask(const string& taskName);
     vector<Task*> getAssignedTasks() const;
+
+    // Project management
+    bool addProject(Project* project);
+    bool removeProject(Project* project);
+    vector<Project*> getAssignedProjects() const;
 
     // Static methods
     static Vendor* getVendor(const string& vendorName);
