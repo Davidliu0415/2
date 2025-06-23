@@ -57,11 +57,13 @@ public:
     void addVendor(Vendor* v);
     void removeVendor(Vendor* v);
     vector<Vendor*>& getVendors();
+    const vector<Vendor*>& getVendors() const;
 
     // Client management
     void addClient(Client* c);
     void removeClient(Client* c);
     vector<Client*>& getClients();
+    const vector<Client*>& getClients() const;
 
     // // Static methods
     // static Project* getProject(const string& projectName);

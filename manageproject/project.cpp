@@ -285,6 +285,7 @@ void Project::removeVendor(Vendor* v) {
     vendors.erase(std::remove(vendors.begin(), vendors.end(), v), vendors.end());
 }
 std::vector<Vendor*>& Project::getVendors() { return vendors; }
+const std::vector<Vendor*>& Project::getVendors() const { return vendors; }
 
 void Project::addClient(Client* c) {
     if (std::find(clients.begin(), clients.end(), c) == clients.end())
@@ -294,3 +295,4 @@ void Project::removeClient(Client* c) {
     clients.erase(std::remove(clients.begin(), clients.end(), c), clients.end());
 }
 std::vector<Client*>& Project::getClients() { return clients; }
+const std::vector<Client*>& Project::getClients() const { return clients; }
