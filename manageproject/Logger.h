@@ -38,6 +38,10 @@ public:
     
     // 显示日志内容
     static void displayLog();
+    
+    // CSV日志
+    static void logToCSV(const string& message, const string& filename = "systemlog.csv");
+    static void displayCSVLog(const string& filename = "systemlog.csv");
 };
 
 #endif // LOGGER_H 

@@ -91,4 +91,26 @@ void Logger::displayLog() {
     } else {
         cout << "Log file not found or cannot be opened." << endl;
     }
+}
+
+void Logger::logToCSV(const string& message, const string& filename) {
+    ofstream file(filename, ios::app);
+    if (file.is_open()) {
+        file << getCurrentTime() << "," << message << endl;
+        file.close();
+    }
+}
+
+void Logger::displayCSVLog(const string& filename) {
+    ifstream file(filename);
+    if (file.is_open()) {
+        cout << "\n=== CSV System Log ===" << endl;
+        string line;
+        while (getline(file, line)) {
+            cout << line << endl;
+        }
+        file.close();
+    } else {
+        cout << "CSV Log file not found or cannot be opened." << endl;
+    }
 } 

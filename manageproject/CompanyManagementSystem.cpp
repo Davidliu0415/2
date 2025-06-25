@@ -1,12 +1,16 @@
 #include "CompanyManagementSystem.h"
 #include <iostream>
 #include <sstream>
+#include "Logger.h"
+#include "ProjectManagementSystem.h"
 using namespace std;
 
-CompanyManagementSystem::CompanyManagementSystem(vector<Project>* projects)
-    : projects(projects) {}
+CompanyManagementSystem::CompanyManagementSystem(vector<Project>* projects, ProjectManagementSystem* pms)
+    : projects(projects), pms(pms) {}
 
 void CompanyManagementSystem::menu() {
+    // 不再创建新的pms对象，所有Vendor/Client与Project的操作都基于传入的projects指针和静态vector
+    // 多对多关系的加载/保存已在main.cpp统一处理
     while (true) {
         cout << "\n=== Company Management ===" << endl;
         cout << "1. Add Vendor" << endl;
@@ -17,6 +21,7 @@ void CompanyManagementSystem::menu() {
         cout << "6. Update Client" << endl;
         cout << "7. Delete Client" << endl;
         cout << "8. Show All Clients" << endl;
+        cout << "9. Show CSV Log" << endl;
         cout << "0. Return to Main Menu" << endl;
         cout << "Please select: ";
         int choice;
@@ -24,13 +29,14 @@ void CompanyManagementSystem::menu() {
         cin.ignore();
         string name;
         switch (choice) {
-            case 0: return;
+            case 0:
+                // 所有保存操作已在main.cpp统一处理
+                return;
             case 1: {
                 Vendor v;
-                v.add();  // 用户输入供应商信息
-                
-                // 先添加到静态vector
+                v.add();
                 Vendor::getAllVendors().push_back(v);
+                Logger::logToCSV("Add Vendor: " + v.getCompanyName());
                 Vendor* vptr = &Vendor::getAllVendors().back();
 
                 if (projects && !projects->empty()) {
@@ -59,6 +65,7 @@ void CompanyManagementSystem::menu() {
                         if (idx >= 0 && idx < projects->size()) {
                             vptr->addProject(&(*projects)[idx]);
                             cout << "Allocated to projects: " << (*projects)[idx].getName() << endl;
+                            if (pms) pms->saveVendorProjectRelations();
                         } else {
                             cout << "Invalid number, please re-enter." << endl;
                         }
@@ -70,12 +77,12 @@ void CompanyManagementSystem::menu() {
             }
                 case 2: {
                     cout << "Enter vendor name to update: ";
-                    cin.ignore(); // Clear input buffer
+                    cin.ignore();
                     getline(cin, name);
-
                     Vendor* v = Vendor::getVendor(name);
                     if (v) {
-                        v->update();  // Update vendor info
+                        v->update();
+                        Logger::logToCSV("Update Vendor: " + v->getCompanyName());
 
                         if (projects && !projects->empty()) {
                             cout << "\nAvailable projects:\n";
@@ -109,6 +116,7 @@ void CompanyManagementSystem::menu() {
                                         Project* p = &(*projects)[idx];
                                         v->addProject(p);
                                         cout << " Assigned to project: " << p->getName() << endl;
+                                        if (pms) pms->saveVendorProjectRelations();
                                     } else {
                                         cout << " Invalid index. Please try again." << endl;
                                     }
@@ -129,8 +137,10 @@ void CompanyManagementSystem::menu() {
                 cout << "Enter vendor name to delete: ";
                 getline(cin, name);
                 Vendor* v = Vendor::getVendor(name);
-                if (v) v->remove();
-                else cout << "Vendor not found." << endl;
+                if (v) {
+                    Logger::logToCSV("Delete Vendor: " + v->getCompanyName());
+                    v->remove();
+                } else cout << "Vendor not found." << endl;
                 break;
             }
             case 4: {
@@ -139,10 +149,9 @@ void CompanyManagementSystem::menu() {
             }
             case 5: {
                 Client c;
-                c.add();  // Input client info
-                
-                // 先添加到静态vector
+                c.add();
                 Client::getAllClients().push_back(c);
+                Logger::logToCSV("Add Client: " + c.getCompanyName());
                 Client* cptr = &Client::getAllClients().back();
 
                 if (projects && !projects->empty()) {
@@ -171,6 +180,7 @@ void CompanyManagementSystem::menu() {
                                 Project* p = &(*projects)[idx];
                                 cptr->addProject(p);
                                 cout << " Assigned to project: " << p->getName() << endl;
+                                if (pms) pms->saveClientProjectRelations();
                             } else {
                                 cout << " Invalid index. Please try again." << endl;
                             }
@@ -186,12 +196,12 @@ void CompanyManagementSystem::menu() {
 
             case 6: {
                 cout << "Enter client name to update: ";
-                cin.ignore(); // Clear input buffer
+                cin.ignore();
                 getline(cin, name);
-
                 Client* c = Client::getClient(name);
                 if (c) {
-                    c->update();  // Update client details
+                    c->update();
+                    Logger::logToCSV("Update Client: " + c->getCompanyName());
 
                     if (projects && !projects->empty()) {
                         cout << "\nAvailable projects:\n";
@@ -225,6 +235,7 @@ void CompanyManagementSystem::menu() {
                                     Project* p = &(*projects)[idx];
                                     c->addProject(p);
                                     cout << " Assigned to project: " << p->getName() << endl;
+                                    if (pms) pms->saveClientProjectRelations();
                                 } else {
                                     cout << " Invalid index. Please try again." << endl;
                                 }
@@ -244,15 +255,21 @@ void CompanyManagementSystem::menu() {
                 cout << "Enter client name to delete: ";
                 getline(cin, name);
                 Client* c = Client::getClient(name);
-                if (c) c->remove();
-                else cout << "Client not found." << endl;
+                if (c) {
+                    Logger::logToCSV("Delete Client: " + c->getCompanyName());
+                    c->remove();
+                } else cout << "Client not found." << endl;
                 break;
             }
             case 8: {
                 for (const auto& c : Client::getAllClients()) c.display();
                 break;
             }
-            default: cout << "Invalid option." << endl;
+            case 9: {
+                Logger::displayCSVLog();
+                break;
+            }
+            default: cout << "Invalid option!" << endl;
         }
     }
 } 

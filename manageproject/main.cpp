@@ -137,6 +137,7 @@ void userMenu(ProjectManagementSystem& pms) {
                 exit(0);
             case 1: {
                 // 显示所有项目
+                pms.loadProjectsFromCSV();
                 cout << "\n=== All Projects ===" << endl;
                 for (const auto& project : pms.getProjects()) {
                     cout << "Project: " << project.getName() << endl;
@@ -149,10 +150,10 @@ void userMenu(ProjectManagementSystem& pms) {
             }
             case 2: {
                 // 显示项目详情
+                pms.loadProjectsFromCSV();
                 cout << "Enter project name to view details: ";
                 string projectName;
                 getline(cin, projectName);
-                
                 Project* project = pms.getProject(projectName);
                 if (project) {
                     project->display();
@@ -240,20 +241,23 @@ void adminMenu(ProjectManagementSystem& pms, CompanyManagementSystem& cms) {
 int main() {
     // 初始化日志系统
     Logger::initialize();
-    
     ProjectManagementSystem pms;
-    CompanyManagementSystem cms(&pms.getProjects());
+    // 加载多对多关系
+    pms.loadVendorProjectRelations();
+    pms.loadClientProjectRelations();
+    CompanyManagementSystem cms(&pms.getProjects(), &pms);
 
     while (true) {
         if (currentUserType == GUEST) {
             // 未登录状态，显示登录菜单
             if (!login(pms)) {
-                cout << "Login failed or cancelled. Exiting..." << endl;
                 Logger::close();
+                // 退出前保存多对多关系
+                pms.saveVendorProjectRelations();
+                pms.saveClientProjectRelations();
                 return 0;
             }
         }
-        
         // 根据用户类型显示相应菜单
         if (currentUserType == ADMIN) {
             adminMenu(pms, cms);
@@ -261,5 +265,8 @@ int main() {
             userMenu(pms);
         }
     }
+    // 程序退出前保存多对多关系
+    pms.saveVendorProjectRelations();
+    pms.saveClientProjectRelations();
 }
 
