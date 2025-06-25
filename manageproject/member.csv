@@ -1,0 +1,4 @@
+memberID,projectID,name,role,contactInfo
+M001,P001,Alice,Developer,alice@example.com
+M002,P001,Bob,Tester,bob@example.com
+M003,P002,Charlie,Product Manager,charlie@example.com 

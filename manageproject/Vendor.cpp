@@ -2,12 +2,13 @@
 #include "Project.h"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 using namespace std;
 
 vector<Vendor> Vendor::vendors;
 
-Vendor::Vendor(const string& name, const string& type, const string& contact)
-    : Company(name, type, {contactPerson{contact, "", ""}}) {}
+Vendor::Vendor(const string& vendorID, const string& projectID, const string& name, const string& type, const string& contact)
+    : Company(name, type, {contactPerson{contact, "", ""}}), vendorID(vendorID), projectID(projectID) {}
 
 bool Vendor::add() {
     cout << "Enter vendor name: ";
@@ -120,4 +121,26 @@ bool Vendor::removeProject(Project* project) {
 
 vector<Project*> Vendor::getAssignedProjects() const {
     return assignedProjects;
+}
+
+Vendor Vendor::fromCSV(const string& line) {
+    stringstream ss(line);
+    string vendorID, projectID, name, type, contact;
+    getline(ss, vendorID, ',');
+    getline(ss, projectID, ',');
+    getline(ss, name, ',');
+    getline(ss, type, ',');
+    getline(ss, contact, ',');
+    return Vendor(vendorID, projectID, name, type, contact);
+}
+
+string Vendor::toCSV() const {
+    string contact = contactInfo.empty() ? "" : contactInfo[0].name;
+    return vendorID + "," + projectID + "," + getCompanyName() + "," + getCompanyType() + "," + contact;
+}
+
+void Vendor::removeVendorFromAllProjects(Vendor* v, std::vector<Project>& projects) {
+    for (auto& proj : projects) {
+        proj.removeVendor(v);
+    }
 } 

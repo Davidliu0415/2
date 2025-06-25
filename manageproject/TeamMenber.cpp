@@ -1,13 +1,12 @@
 #include "TeamMenber.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 // ✅ 构造函数
-TeamMember::TeamMember(const string& name,
-                       const string& role,
-                       const string& contactInfo)
-    : name(name), role(role), contactInfo(contactInfo) {}
+TeamMember::TeamMember(const string& memberID, const string& projectID, const string& name, const string& role, const string& contactInfo)
+    : name(name), role(role), contactInfo(contactInfo), memberID(memberID), projectID(projectID) {}
 
 // ✅ 添加成员（用户输入）
 void TeamMember::add() {
@@ -64,4 +63,19 @@ void TeamMember::display() const {
     cout << "Name: " << name << endl;
     cout << "Role: " << role << endl;
     cout << "Contact Info: " << contactInfo << endl;
+}
+
+TeamMember TeamMember::fromCSV(const string& line) {
+    stringstream ss(line);
+    string memberID, projectID, name, role, contactInfo;
+    getline(ss, memberID, ',');
+    getline(ss, projectID, ',');
+    getline(ss, name, ',');
+    getline(ss, role, ',');
+    getline(ss, contactInfo, ',');
+    return TeamMember(memberID, projectID, name, role, contactInfo);
+}
+
+string TeamMember::toCSV() const {
+    return memberID + "," + projectID + "," + name + "," + role + "," + contactInfo;
 }

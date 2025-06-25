@@ -15,17 +15,18 @@ class Client; // 前向声明
 
 class Project : public PT {
 private:
+    string projectID;
     vector<Task> tasks;
     vector<TeamMember> teamMembers;
     vector<Vendor*> vendors;
     vector<Client*> clients;
 
 public:
-    Project(const string& name = "",
-            const string& description = "",
-            const string& startDate = "",
-            const string& endDate = "",
-            const string& status = "Not Started");
+    Project(const string& projectID = "", const string& name = "", const string& description = "", const string& startDate = "", const string& endDate = "", const string& status = "Not Started");
+    void setProjectID(const string& id) { projectID = id; }
+    string getProjectID() const { return projectID; }
+    static Project fromCSV(const string& line);
+    string toCSV() const;
 
     // CRUD operations
     void add() ;
@@ -57,11 +58,13 @@ public:
     void addVendor(Vendor* v);
     void removeVendor(Vendor* v);
     vector<Vendor*>& getVendors();
+    const vector<Vendor*>& getVendors() const;
 
     // Client management
     void addClient(Client* c);
     void removeClient(Client* c);
     vector<Client*>& getClients();
+    const vector<Client*>& getClients() const;
 
     // // Static methods
     // static Project* getProject(const string& projectName);

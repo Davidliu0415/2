@@ -15,11 +15,11 @@ private:
     vector<Task*> assignedTasks;                // 原始指针替代 weak_ptr
     vector<Project*> assignedProjects;
     static vector<Vendor> vendors;              // 不再使用 shared_ptr
+    string vendorID;
+    string projectID;
 
 public:
-    Vendor(const string& name = "",
-           const string& type = "",
-           const string& contact = "");
+    Vendor(const string& vendorID = "", const string& projectID = "", const string& name = "", const string& type = "", const string& contact = "");
 
     // CRUD operations
     bool add() override;
@@ -42,6 +42,14 @@ public:
     static vector<Vendor>& getAllVendors();
     static bool saveToFile(const string& filename);
     static bool loadFromFile(const string& filename);
+    static void removeVendorFromAllProjects(Vendor* v, std::vector<Project>& projects);
+
+    void setVendorID(const string& id) { vendorID = id; }
+    string getVendorID() const { return vendorID; }
+    void setProjectID(const string& id) { projectID = id; }
+    string getProjectID() const { return projectID; }
+    static Vendor fromCSV(const string& line);
+    string toCSV() const;
 };
 
 #endif // VENDOR_H

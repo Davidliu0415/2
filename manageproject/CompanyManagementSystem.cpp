@@ -28,23 +28,18 @@ void CompanyManagementSystem::menu() {
             case 1: {
                 Vendor v;
                 v.add();  // 用户输入供应商信息
-                
-                // 先添加到静态vector
+                // 先添加到全局池
                 Vendor::getAllVendors().push_back(v);
                 Vendor* vptr = &Vendor::getAllVendors().back();
-
                 if (projects && !projects->empty()) {
                     cout << "\nAvailable projects:\n";
                     for (size_t i = 0; i < projects->size(); ++i)
                         cout << "  [" << i << "] " << (*projects)[i].getName() << endl;
-
                     cout << "\nEnter the item number to be assigned to the vendor and enter -1 to end the assignment。" << endl;
                     int idx;
-
                     while (true) {
                         cout << "项目编号: ";
                         cin >> idx;
-
                         if (cin.fail()) {
                             cin.clear();
                             string dummy;
@@ -53,9 +48,7 @@ void CompanyManagementSystem::menu() {
                             cout << " Illegal entry, please enter a number or -1 to exit." << endl;
                             continue;
                         }
-
                         if (idx == -1) break;
-
                         if (idx >= 0 && idx < projects->size()) {
                             vptr->addProject(&(*projects)[idx]);
                             cout << "Allocated to projects: " << (*projects)[idx].getName() << endl;
@@ -64,7 +57,6 @@ void CompanyManagementSystem::menu() {
                         }
                     }
                 }
-                
                 cout << "Vendor added successfully." << endl;
                 break;
             }
@@ -129,8 +121,10 @@ void CompanyManagementSystem::menu() {
                 cout << "Enter vendor name to delete: ";
                 getline(cin, name);
                 Vendor* v = Vendor::getVendor(name);
-                if (v) v->remove();
-                else cout << "Vendor not found." << endl;
+                if (v) {
+                    Vendor::removeVendorFromAllProjects(v, *projects);
+                    v->remove();
+                } else cout << "Vendor not found." << endl;
                 break;
             }
             case 4: {
@@ -140,33 +134,26 @@ void CompanyManagementSystem::menu() {
             case 5: {
                 Client c;
                 c.add();  // Input client info
-                
-                // 先添加到静态vector
+                // 先添加到全局池
                 Client::getAllClients().push_back(c);
                 Client* cptr = &Client::getAllClients().back();
-
                 if (projects && !projects->empty()) {
                     cout << "\nAvailable projects:\n";
                     for (size_t i = 0; i < projects->size(); ++i)
                         cout << "  [" << i << "] " << (*projects)[i].getName() << endl;
-
                     cout << "\nEnter project indices to assign to this client one by one." << endl;
                     cout << "Enter -1 to finish, or 'q' to skip assignment." << endl;
-
                     while (true) {
                         cout << "Project index: ";
                         string input;
                         getline(cin, input);
-
                         if (input == "q" || input == "Q") {
                             cout << "Skipped project assignment." << endl;
                             break;
                         }
-
                         try {
                             int idx = stoi(input);
                             if (idx == -1) break;
-
                             if (idx >= 0 && idx < projects->size()) {
                                 Project* p = &(*projects)[idx];
                                 cptr->addProject(p);
@@ -179,7 +166,6 @@ void CompanyManagementSystem::menu() {
                         }
                     }
                 }
-
                 cout << "Client added successfully." << endl;
                 break;
             }
@@ -244,8 +230,10 @@ void CompanyManagementSystem::menu() {
                 cout << "Enter client name to delete: ";
                 getline(cin, name);
                 Client* c = Client::getClient(name);
-                if (c) c->remove();
-                else cout << "Client not found." << endl;
+                if (c) {
+                    Client::removeClientFromAllProjects(c, *projects);
+                    c->remove();
+                } else cout << "Client not found." << endl;
                 break;
             }
             case 8: {

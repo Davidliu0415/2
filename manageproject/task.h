@@ -12,11 +12,13 @@ using namespace std;
 class Task : public PT {
 private:
     vector<Task> subtasks;
+    string taskID;
+    string projectID;
     // Project* parentProject = nullptr;
     // Task* parentTask = nullptr;
 
 public:
-    Task(const string& name = "",
+    Task(const string& taskID = "", const string& projectID = "", const string& name = "",
          const string& description = "",
          const string& startDate = "",
          const string& endDate = "",
@@ -47,6 +49,13 @@ public:
     // static vector<Task>& getAllTasks();
     // static bool saveToFile(const string& filename);
     // static bool loadFromFile(const string& filename);
+
+    void setTaskID(const string& id) { taskID = id; }
+    string getTaskID() const { return taskID; }
+    void setProjectID(const string& id) { projectID = id; }
+    string getProjectID() const { return projectID; }
+    static Task fromCSV(const string& line);
+    string toCSV() const;
 };
 
 #endif // TASK_H

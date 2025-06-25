@@ -5,15 +5,28 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 
 // Constructor implementation
-Project::Project(const string& name, const string& description, 
-                const string& startDate, const string& endDate, 
-                const string& status)
-    : PT(name, description, startDate, endDate, status) {}
+Project::Project(const string& projectID, const string& name, const string& description, const string& startDate, const string& endDate, const string& status)
+    : PT(name, description, startDate, endDate, status), projectID(projectID) {}
 
+Project Project::fromCSV(const string& line) {
+    stringstream ss(line);
+    string projectID, name, description, startDate, endDate, status;
+    getline(ss, projectID, ',');
+    getline(ss, name, ',');
+    getline(ss, description, ',');
+    getline(ss, startDate, ',');
+    getline(ss, endDate, ',');
+    getline(ss, status, ',');
+    return Project(projectID, name, description, startDate, endDate, status);
+}
 
+string Project::toCSV() const {
+    return projectID + "," + getName() + "," + getDescription() + "," + getStartDate() + "," + getEndDate() + "," + getStatus();
+}
 
 void Project::display() const {
     cout << "\nProject Information:" << endl;
@@ -39,7 +52,7 @@ void Project::display() const {
             cout << "None";
         } else {
             for (const auto* v : vendors) {
-                if (v && !v->getCompanyName().empty()) {
+                if (v && !v->getCompanyName().empty() && v != nullptr) {
                     cout << v->getCompanyName() << " ";
                 }
             }
@@ -57,7 +70,7 @@ void Project::display() const {
             cout << "None";
         } else {
             for (const auto* c : clients) {
-                if (c && !c->getCompanyName().empty()) {
+                if (c && !c->getCompanyName().empty() && c != nullptr) {
                     cout << c->getCompanyName() << " ";
                 }
             }
@@ -278,19 +291,23 @@ const vector<TeamMember>& Project::getTeamMembers() const {
 }
 
 void Project::addVendor(Vendor* v) {
+    if (!v) return;
     if (std::find(vendors.begin(), vendors.end(), v) == vendors.end())
         vendors.push_back(v);
 }
 void Project::removeVendor(Vendor* v) {
+    if (!v) return;
     vendors.erase(std::remove(vendors.begin(), vendors.end(), v), vendors.end());
 }
-std::vector<Vendor*>& Project::getVendors() { return vendors; }
+const std::vector<Vendor*>& Project::getVendors() const { return vendors; }
 
 void Project::addClient(Client* c) {
+    if (!c) return;
     if (std::find(clients.begin(), clients.end(), c) == clients.end())
         clients.push_back(c);
 }
 void Project::removeClient(Client* c) {
+    if (!c) return;
     clients.erase(std::remove(clients.begin(), clients.end(), c), clients.end());
 }
-std::vector<Client*>& Project::getClients() { return clients; }
+const std::vector<Client*>& Project::getClients() const { return clients; }

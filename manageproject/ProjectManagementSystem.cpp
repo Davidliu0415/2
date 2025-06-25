@@ -1,12 +1,125 @@
 #include "ProjectManagementSystem.h"
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <set>
+#include "Client.h"
+#include "Vendor.h"
+#include "TeamMenber.h"
+#include "task.h"
 
 ProjectManagementSystem::ProjectManagementSystem() {
     cout << "Project Management System Started\n";
+    // 1. 读取主文件 project.csv
+    std::ifstream fin("projects.csv");
+    std::string line;
+    // 跳过表头
+    getline(fin, line);
+    while (getline(fin, line)) {
+        if (!line.empty())
+            projects.push_back(Project::fromCSV(line));
+    }
+    // 2. 读取任务 task.csv
+    std::ifstream fin_task("task.csv");
+    getline(fin_task, line); // 跳过表头
+    while (getline(fin_task, line)) {
+        if (!line.empty()) {
+            Task t = Task::fromCSV(line);
+            for (auto& proj : projects) {
+                if (proj.getProjectID() == t.getProjectID()) {
+                    proj.addTask(t);
+                    break;
+                }
+            }
+        }
+    }
+    // 3. 读取成员 member.csv
+    std::ifstream fin_member("member.csv");
+    getline(fin_member, line); // 跳过表头
+    while (getline(fin_member, line)) {
+        if (!line.empty()) {
+            TeamMember m = TeamMember::fromCSV(line);
+            for (auto& proj : projects) {
+                if (proj.getProjectID() == m.getProjectID()) {
+                    proj.addTeamMember(m);
+                    break;
+                }
+            }
+        }
+    }
+    // 4. 读取客户 client.csv
+    std::ifstream fin_client("client.csv");
+    getline(fin_client, line); // 跳过表头
+    while (getline(fin_client, line)) {
+        if (!line.empty()) {
+            clientsPool.push_back(Client::fromCSV(line));
+            Client* cptr = &clientsPool.back();
+            for (auto& proj : projects) {
+                if (proj.getProjectID() == cptr->getProjectID()) {
+                    proj.addClient(cptr);
+                    break;
+                }
+            }
+        }
+    }
+    // 5. 读取供应商 vendor.csv
+    std::ifstream fin_vendor("vendor.csv");
+    getline(fin_vendor, line); // 跳过表头
+    while (getline(fin_vendor, line)) {
+        if (!line.empty()) {
+            vendorsPool.push_back(Vendor::fromCSV(line));
+            Vendor* vptr = &vendorsPool.back();
+            for (auto& proj : projects) {
+                if (proj.getProjectID() == vptr->getProjectID()) {
+                    proj.addVendor(vptr);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 ProjectManagementSystem::~ProjectManagementSystem() {
     cout << "Project Management System Closed\n";
+    // 1. 写主文件 project.csv
+    std::ofstream fout("projects.csv");
+    fout << "projectID,projectName,description,startDate,endDate,status" << std::endl;
+    for (const auto& p : projects) {
+        fout << p.toCSV() << std::endl;
+    }
+    // 2. 自动生成 task.csv
+    std::ofstream fout_task("task.csv");
+    fout_task << "taskID,projectID,taskName,description,startDate,endDate,status" << std::endl;
+    for (const auto& p : projects) {
+        for (const auto& t : p.getTasks()) {
+            fout_task << t.toCSV() << std::endl;
+        }
+    }
+    // 3. 自动生成 member.csv
+    std::ofstream fout_member("member.csv");
+    fout_member << "memberID,projectID,name,role,contactInfo" << std::endl;
+    for (const auto& p : projects) {
+        for (const auto& m : p.getTeamMembers()) {
+            fout_member << m.toCSV() << std::endl;
+        }
+    }
+    // 4. 自动生成 client.csv
+    std::ofstream fout_client("client.csv");
+    fout_client << "clientID,projectID,clientName,type,contact" << std::endl;
+    for (const auto& p : projects) {
+        for (const auto& c : p.getClients()) {
+            fout_client << c->toCSV() << std::endl;
+        }
+    }
+    // 5. 自动生成 vendor.csv
+    std::ofstream fout_vendor("vendor.csv");
+    fout_vendor << "vendorID,projectID,vendorName,type,contact" << std::endl;
+    for (const auto& p : projects) {
+        for (const auto& v : p.getVendors()) {
+            fout_vendor << v->toCSV() << std::endl;
+        }
+    }
 }
 
 // ==================== Find Project ====================

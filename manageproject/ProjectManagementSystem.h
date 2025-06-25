@@ -7,12 +7,16 @@
 #include"project.h"
 #include"Task.h"
 #include"TeamMenber.h"
+#include"Vendor.h"
+#include"Client.h"
 
 using namespace std;
 
 class ProjectManagementSystem {
 private:
     vector<Project> projects;
+    vector<Vendor> vendorsPool;
+    vector<Client> clientsPool;
 
 public:
     ProjectManagementSystem();

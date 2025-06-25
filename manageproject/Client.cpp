@@ -2,6 +2,7 @@
 #include "Project.h"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 using namespace std;
 
 vector<Client> Client::clients;
@@ -103,4 +104,30 @@ Client* Client::getClient(const string& clientName) {
 
 vector<Client>& Client::getAllClients() {
     return clients;
+}
+
+Client::Client(const string& clientID, const string& projectID, const string& name, const string& type, const vector<contactPerson>& contacts)
+    : Company(name, type, contacts), clientID(clientID), projectID(projectID) {}
+
+Client Client::fromCSV(const string& line) {
+    stringstream ss(line);
+    string clientID, projectID, name, type, contact;
+    getline(ss, clientID, ',');
+    getline(ss, projectID, ',');
+    getline(ss, name, ',');
+    getline(ss, type, ',');
+    getline(ss, contact, ',');
+    vector<contactPerson> contacts = {contactPerson{contact, "", ""}};
+    return Client(clientID, projectID, name, type, contacts);
+}
+
+string Client::toCSV() const {
+    string contact = contactInfo.empty() ? "" : contactInfo[0].name;
+    return clientID + "," + projectID + "," + getCompanyName() + "," + getCompanyType() + "," + contact;
+}
+
+void Client::removeClientFromAllProjects(Client* c, std::vector<Project>& projects) {
+    for (auto& proj : projects) {
+        proj.removeClient(c);
+    }
 } 

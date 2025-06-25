@@ -1,15 +1,29 @@
 #include "task.h"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-Task::Task(const string& name,
-           const string& description,
-           const string& startDate,
-           const string& endDate,
-           const string& status)
-    : PT(name, description, startDate, endDate, status) {}
+Task::Task(const string& taskID, const string& projectID, const string& name, const string& description, const string& startDate, const string& endDate, const string& status)
+    : PT(name, description, startDate, endDate, status), taskID(taskID), projectID(projectID) {}
+
+Task Task::fromCSV(const string& line) {
+    stringstream ss(line);
+    string taskID, projectID, name, description, startDate, endDate, status;
+    getline(ss, taskID, ',');
+    getline(ss, projectID, ',');
+    getline(ss, name, ',');
+    getline(ss, description, ',');
+    getline(ss, startDate, ',');
+    getline(ss, endDate, ',');
+    getline(ss, status, ',');
+    return Task(taskID, projectID, name, description, startDate, endDate, status);
+}
+
+string Task::toCSV() const {
+    return taskID + "," + projectID + "," + getName() + "," + getDescription() + "," + getStartDate() + "," + getEndDate() + "," + getStatus();
+}
 
 // 添加任务（此处为示例，可与项目逻辑结合）
 void Task::add() {
