@@ -1,8 +1,10 @@
 #include "ProjectManagementSystem.h"
 #include <algorithm>
+#include "project.h"
 
 ProjectManagementSystem::ProjectManagementSystem() {
     cout << "Project Management System Started\n";
+    Project::loadAllFromCSV(projects, "project.csv");
 }
 
 ProjectManagementSystem::~ProjectManagementSystem() {
@@ -45,6 +47,7 @@ void ProjectManagementSystem::ProjectManage() {
                 if (!getProject(temp.getName())) {
                     projects.push_back(temp);
                     cout << " Project added successfully!" << endl;
+                    Project::saveAllToCSV(projects, "project.csv");
                 } else {
                     cout << " Project with same name already exists!" << endl;
                 }
@@ -62,6 +65,7 @@ void ProjectManagementSystem::ProjectManage() {
                         if (project.getName() == name) {
                             project.update();  // 找到后调用 update()
                             found = true;
+                            Project::saveAllToCSV(projects, "project.csv");
                             break;
                         }
                     }
@@ -86,6 +90,7 @@ void ProjectManagementSystem::ProjectManage() {
                                 projects.erase(it);
                                 cout << " Project \"" << name << "\" deleted successfully.\n";
                                 deleted = true;
+                                Project::saveAllToCSV(projects, "project.csv");
                                 break;
                             }
                         }
@@ -148,6 +153,7 @@ void ProjectManagementSystem::TaskManage() {
                 temp.add();
                 if (!project->getTask(temp.getName())) {
                     project->addTask(temp);
+                    Project::saveAllToCSV(projects, "project.csv");
                 } else {
                     cout << " Task with same name already exists." << endl;
                 }
@@ -158,6 +164,7 @@ void ProjectManagementSystem::TaskManage() {
                 getline(cin, tname);
                 if (Task* t = project->getTask(tname)) {
                     t->update();
+                    Project::saveAllToCSV(projects, "project.csv");
                 } else {
                     cout << " Task not found." << endl;
                 }
@@ -168,6 +175,8 @@ void ProjectManagementSystem::TaskManage() {
                 getline(cin, tname);
                 if (!project->removeTask(tname)) {
                     cout << " Delete failed, task does not exist." << endl;
+                } else {
+                    Project::saveAllToCSV(projects, "project.csv");
                 }
                 break;
 
@@ -253,6 +262,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 temp.add();
                 if (!project->getTeamMember(temp.getName())) {
                     project->addTeamMember(temp);
+                    Project::saveAllToCSV(projects, "project.csv");
                 } else {
                     cout << " Member with same name already exists." << endl;
                 }
@@ -263,6 +273,7 @@ void ProjectManagementSystem::TeamMemberManage() {
                 getline(cin, mname);
                 if (TeamMember* m = project->getTeamMember(mname)) {
                     m->update();
+                    Project::saveAllToCSV(projects, "project.csv");
                 } else {
                     cout << " Member not found." << endl;
                 }
@@ -273,6 +284,8 @@ void ProjectManagementSystem::TeamMemberManage() {
                 getline(cin, mname);
                 if (!project->removeTeamMember(mname)) {
                     cout << " Delete failed, member does not exist." << endl;
+                } else {
+                    Project::saveAllToCSV(projects, "project.csv");
                 }
                 break;
 

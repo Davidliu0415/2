@@ -1,7 +1,14 @@
 #include "CompanyManagementSystem.h"
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 using namespace std;
+
+static std::string trim(const std::string& s) {
+    size_t start = s.find_first_not_of(" \t\r\n\"");
+    size_t end = s.find_last_not_of(" \t\r\n\"");
+    return (start == std::string::npos) ? "" : s.substr(start, end - start + 1);
+}
 
 CompanyManagementSystem::CompanyManagementSystem(vector<Project>* projects)
     : projects(projects) {}
@@ -72,7 +79,7 @@ void CompanyManagementSystem::menu() {
                     cout << "Enter vendor name to update: ";
                     cin.ignore(); // Clear input buffer
                     getline(cin, name);
-
+                    name = trim(name);
                     Vendor* v = Vendor::getVendor(name);
                     if (v) {
                         v->update();  // Update vendor info
@@ -96,6 +103,10 @@ void CompanyManagementSystem::menu() {
                                 string input;
                                 getline(cin, input);
 
+                                if (input.empty()) {
+                                    cout << "Empty input, exit assignment." << endl;
+                                    break;
+                                }
                                 if (input == "q" || input == "Q") {
                                     cout << "Skipped project assignment." << endl;
                                     break;
@@ -114,6 +125,7 @@ void CompanyManagementSystem::menu() {
                                     }
                                 } catch (...) {
                                     cout << " Invalid input. Please enter a number, -1 to stop, or q to skip." << endl;
+                                    break;
                                 }
                             }
                         } else {
@@ -128,6 +140,7 @@ void CompanyManagementSystem::menu() {
             case 3: {
                 cout << "Enter vendor name to delete: ";
                 getline(cin, name);
+                name = trim(name);
                 Vendor* v = Vendor::getVendor(name);
                 if (v) v->remove();
                 else cout << "Vendor not found." << endl;
@@ -188,7 +201,7 @@ void CompanyManagementSystem::menu() {
                 cout << "Enter client name to update: ";
                 cin.ignore(); // Clear input buffer
                 getline(cin, name);
-
+                name = trim(name);
                 Client* c = Client::getClient(name);
                 if (c) {
                     c->update();  // Update client details
@@ -212,6 +225,10 @@ void CompanyManagementSystem::menu() {
                             string input;
                             getline(cin, input);
 
+                            if (input.empty()) {
+                                cout << "Empty input, exit assignment." << endl;
+                                break;
+                            }
                             if (input == "q" || input == "Q") {
                                 cout << "Skipped project assignment." << endl;
                                 break;
@@ -230,6 +247,7 @@ void CompanyManagementSystem::menu() {
                                 }
                             } catch (...) {
                                 cout << " Invalid input. Please enter a number, -1 to stop, or q to skip." << endl;
+                                break;
                             }
                         }
                     } else {
@@ -243,6 +261,7 @@ void CompanyManagementSystem::menu() {
             case 7: {
                 cout << "Enter client name to delete: ";
                 getline(cin, name);
+                name = trim(name);
                 Client* c = Client::getClient(name);
                 if (c) c->remove();
                 else cout << "Client not found." << endl;

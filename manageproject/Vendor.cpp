@@ -2,6 +2,7 @@
 #include "Project.h"
 #include <iostream>
 #include <algorithm>
+#include <cctype>
 using namespace std;
 
 vector<Vendor> Vendor::vendors;
@@ -92,9 +93,16 @@ vector<Task*> Vendor::getAssignedTasks() const {
     return assignedTasks;
 }
 
+static std::string trim(const std::string& s) {
+    size_t start = s.find_first_not_of(" \t\r\n\"");
+    size_t end = s.find_last_not_of(" \t\r\n\"");
+    return (start == std::string::npos) ? "" : s.substr(start, end - start + 1);
+}
+
 Vendor* Vendor::getVendor(const string& vendorName) {
+    std::string key = trim(vendorName);
     for (auto& v : vendors) {
-        if (v.companyName == vendorName) return &v;
+        if (trim(v.companyName) == key) return &v;
     }
     return nullptr;
 }

@@ -11,8 +11,9 @@ using namespace std;
 
 class Logger {
 private:
+    // 日志文件名，默认为log.csv
     static string logFileName;
-    static ofstream logFile;
+    // static ofstream logFile;
     static bool isInitialized;
     
 public:

@@ -1,21 +1,24 @@
 #include "Logger.h"
 #include <sstream>
 #include <iomanip>
+#include <fstream>
 
-string Logger::logFileName = "project_management.log";
-ofstream Logger::logFile;
+string Logger::logFileName = "log.csv";
 bool Logger::isInitialized = false;
 
 void Logger::initialize(const string& filename) {
     if (!isInitialized) {
         logFileName = filename;
-        logFile.open(logFileName, ios::app);
-        if (logFile.is_open()) {
-            isInitialized = true;
-            log("=== Project Management System Started ===");
-        } else {
-            cerr << "Failed to open log file: " << logFileName << endl;
+        // 检查文件是否存在，不存在则写入表头
+        std::ifstream infile(logFileName);
+        if (!infile.good()) {
+            std::ofstream outfile(logFileName);
+            if (outfile.is_open()) {
+                outfile << "时间,内容" << std::endl;
+                outfile.close();
+            }
         }
+        isInitialized = true;
     }
 }
 
@@ -35,9 +38,12 @@ string Logger::getCurrentTime() {
 }
 
 void Logger::log(const string& message) {
-    if (isInitialized && logFile.is_open()) {
-        logFile << "[" << getCurrentTime() << "] " << message << endl;
-        logFile.flush(); // 确保立即写入文件
+    if (!isInitialized) initialize(logFileName);
+    string timeStr = getCurrentTime();
+    ofstream file(logFileName, ios::app);
+    if (file.is_open()) {
+        file << '"' << timeStr << '"' << ',' << '"' << message << '"' << std::endl;
+        file.close();
     }
 }
 
@@ -72,23 +78,22 @@ void Logger::logSubtaskOperation(const string& operation, const string& subtaskN
 }
 
 void Logger::close() {
-    if (isInitialized && logFile.is_open()) {
+    if (isInitialized) {
         log("=== Project Management System Closed ===");
-        logFile.close();
         isInitialized = false;
     }
 }
 
 void Logger::displayLog() {
-    ifstream readFile(logFileName);
-    if (readFile.is_open()) {
-        cout << "\n=== System Log ===" << endl;
-        string line;
-        while (getline(readFile, line)) {
-            cout << line << endl;
-        }
-        readFile.close();
-    } else {
-        cout << "Log file not found or cannot be opened." << endl;
+    ifstream file(logFileName);
+    if (!file.is_open()) {
+        cout << "无法打开日志文件！" << endl;
+        return;
     }
+    string line;
+    cout << "\n=== 日志内容 (log.csv) ===" << endl;
+    while (getline(file, line)) {
+        cout << line << endl;
+    }
+    file.close();
 } 

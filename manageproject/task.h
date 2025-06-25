@@ -47,6 +47,9 @@ public:
     // static vector<Task>& getAllTasks();
     // static bool saveToFile(const string& filename);
     // static bool loadFromFile(const string& filename);
+
+    // 获取子任务列表（const版本）
+    const vector<Task>& getSubtasks() const { return subtasks; }
 };
 
 #endif // TASK_H

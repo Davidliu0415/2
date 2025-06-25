@@ -57,17 +57,30 @@ public:
     void addVendor(Vendor* v);
     void removeVendor(Vendor* v);
     vector<Vendor*>& getVendors();
+    const vector<Vendor*>& getVendors() const { return vendors; }
 
     // Client management
     void addClient(Client* c);
     void removeClient(Client* c);
     vector<Client*>& getClients();
+    const vector<Client*>& getClients() const { return clients; }
 
     // // Static methods
     // static Project* getProject(const string& projectName);
     // static vector<Project>& getAllProjects();
     // static bool saveToFile(const string& filename);
     // static bool loadFromFile(const string& filename);
+
+    // 静态方法：保存所有项目到CSV
+    static bool saveToCSV(const std::vector<Project>& projects, const std::string& filename);
+
+    // 静态方法：从CSV加载所有项目
+    static bool loadFromCSV(std::vector<Project>& projects, const std::string& filename);
+
+    // 保存所有项目及其任务、成员、供应商、客户到project.csv
+    static bool saveAllToCSV(const std::vector<Project>& projects, const std::string& filename);
+    // 从project.csv加载所有项目及其任务、成员、供应商、客户
+    static bool loadAllFromCSV(std::vector<Project>& projects, const std::string& filename);
 };
 
 #endif // PROJECT_H

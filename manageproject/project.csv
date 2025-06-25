@@ -1,0 +1,9 @@
+type,project_name,task_name,subtask_name,member_name,role,contact,vendor_name,client_name,description,start_date,end_date,status,vendor_type,vendor_contact,client_type,client_contact
+Project,"DemoProject1",,,,,,,,"A demo project","2024-06-01","2024-12-31","In Progress",,,,,
+Task,"DemoProject1","DemoTask1",,,,,,,"A demo task","2024-06-01","2024-07-01","Not Started",,,,,
+Member,"DemoProject1",,,,"Alice","Developer","alice@example.com",,,,,,,,,
+Vendor,"DemoProject1",,,,,,"VendorA",,,,"IT Supplier","Bob Vendor",,,,
+Client,"DemoProject1",,,,,,,"ClientA",,,,"Enterprise","Carol Client"
+Project,"DemoProject2",,,,,,,,"Another project","2024-07-01","2024-12-31","Not Started",,,,,
+Task,"DemoProject2","DemoTask2",,,,,,,"Another task","2024-07-01","2024-08-01","Not Started",,,,,
+Member,"DemoProject2",,,,"Eve","Tester","eve@example.com",,,,,,,,,
